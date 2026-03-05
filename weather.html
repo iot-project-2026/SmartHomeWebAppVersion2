@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <script src="js/sidebar.js" defer></script>
+    <title>Dự báo Thời tiết</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #000;
+        color: #fff;
+        min-height: 100vh;
+      }
+
+      .main {
+        flex: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .panel {
+        background: rgba(28, 28, 30, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+
+      .cities {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .city-btn {
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+        text-align: left;
+      }
+
+      .city-btn:hover {
+        background: rgba(0, 122, 255, 0.1);
+        border-color: #007aff;
+      }
+
+      .city-btn.active {
+        background: #007aff;
+        border-color: #007aff;
+      }
+
+      .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 15px 0;
+      }
+
+      .coords {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .coords input {
+        padding: 10px;
+        background: rgba(28, 28, 30, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 12px;
+      }
+
+      .coords input:focus {
+        outline: none;
+        border-color: #007aff;
+      }
+
+      .coords button {
+        padding: 10px;
+        background: #007aff;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+
+      .coords button:hover {
+        background: #0051d5;
+      }
+
+      .weather {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .loading {
+        padding: 40px;
+        text-align: center;
+        color: #8e8e93;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-top-color: #007aff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .weather-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+      }
+
+      .weather-left h2 {
+        font-size: 14px;
+        opacity: 0.7;
+        margin-bottom: 5px;
+      }
+
+      .temp-big {
+        font-size: 40px;
+        font-weight: 300;
+        line-height: 1;
+      }
+
+      .weather-right {
+        text-align: right;
+      }
+
+      .weather-icon {
+        font-size: 40px;
+        margin-bottom: 5px;
+      }
+
+      .weather-desc {
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .temp-range {
+        font-size: 11px;
+        opacity: 0.7;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .detail {
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .detail-label {
+        font-size: 11px;
+        opacity: 0.6;
+        margin-bottom: 5px;
+      }
+
+      .detail-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #60a5fa;
+      }
+
+      .section-title {
+        font-size: 12px;
+        opacity: 0.7;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+      }
+
+      .hourly {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      .hourly-item {
+        flex-shrink: 0;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        text-align: center;
+        font-size: 11px;
+        min-width: 60px;
+      }
+
+      .hourly-time {
+        opacity: 0.7;
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+
+      .hourly-icon {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .hourly-temp {
+        font-weight: 600;
+      }
+
+      .daily {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .daily-item {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        font-size: 12px;
+      }
+
+      .daily-day {
+        min-width: 40px;
+        font-weight: 600;
+      }
+
+      .daily-icon {
+        font-size: 20px;
+      }
+
+      .daily-temps {
+        margin-left: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .daily-low {
+        opacity: 0.6;
+      }
+
+      .daily-high {
+        font-weight: 600;
+        color: #fbbf24;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn {
+        flex: 1;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+
+      .btn:hover {
+        background: rgba(0, 122, 255, 0.1);
+        border-color: #007aff;
+      }
+
+      .btn.active {
+        background: #007aff;
+        border-color: #007aff;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 900px) {
+        .main {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sidebar-container"></div>
+    <div class="main">
+      <!-- LEFT PANEL -->
+      <div class="panel">
+        <h1>📍 Chọn Địa Chỉ</h1>
+
+        <div class="cities">
+          <button
+            class="city-btn active"
+            onclick="loadCity(10.8231, 106.6297, 'Hồ Chí Minh', this)"
+          >
+            📌 Hồ Chí Minh
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(21.0285, 105.8542, 'Hà Nội', this)"
+          >
+            📌 Hà Nội
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(16.0544, 108.2022, 'Đà Nẵng', this)"
+          >
+            📌 Đà Nẵng
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(10.0452, 105.7469, 'Cần Thơ', this)"
+          >
+            📌 Cần Thơ
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(12.2388, 109.1967, 'Nha Trang', this)"
+          >
+            📌 Nha Trang
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(16.4637, 107.5909, 'Huế', this)"
+          >
+            📌 Huế
+          </button>
+          <button
+            class="city-btn"
+            onclick="loadCity(20.8449, 106.6881, 'Hải Phòng', this)"
+          >
+            📌 Hải Phòng
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="coords">
+          <input
+            type="number"
+            id="lat"
+            placeholder="Vĩ độ (latitude)"
+            step="0.0001"
+            value="10.8231"
+          />
+          <input
+            type="number"
+            id="lon"
+            placeholder="Kinh độ (longitude)"
+            step="0.0001"
+            value="106.6297"
+          />
+          <button onclick="loadCoords()">🔍 Tìm Kiếm</button>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="panel">
+        <h1>⛅ Thời Tiết</h1>
+
+        <div class="loading hidden" id="loading">
+          <div class="spinner"></div>
+          <p>Đang tải...</p>
+        </div>
+
+        <div class="weather hidden" id="weather">
+          <div class="weather-header">
+            <div class="weather-left">
+              <h2 id="location">--</h2>
+              <div class="temp-big" id="temp">--°</div>
+              <div style="font-size: 11px; opacity: 0.6" id="time">--</div>
+            </div>
+            <div class="weather-right">
+              <div class="weather-icon" id="icon">☀️</div>
+              <div class="weather-desc" id="desc">--</div>
+              <div class="temp-range">
+                <span
+                  >↑<span id="high">--</span>° ↓<span id="low">--</span>°</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <div class="detail-label">💧 Độ Ẩm</div>
+              <div class="detail-value" id="humidity">--%</div>
+            </div>
+            <div class="detail">
+              <div class="detail-label">💨 Gió</div>
+              <div class="detail-value" id="wind">-- km/h</div>
+            </div>
+            <div class="detail">
+              <div class="detail-label">🌧️ Mưa</div>
+              <div class="detail-value" id="rain">-- mm</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-title">⏰ Dự báo giờ</div>
+            <div class="hourly" id="hourly"></div>
+          </div>
+
+          <div>
+            <div class="section-title">📅 Dự báo 7 ngày</div>
+            <div class="daily" id="daily"></div>
+          </div>
+
+          <div class="controls">
+            <button class="btn active" onclick="setUnit('C', this)">°C</button>
+            <button class="btn" onclick="setUnit('F', this)">°F</button>
+            <button class="btn" onclick="reload()">🔄 Tải lại</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const CODES = {
+        0: "☀️",
+        1: "🌤️",
+        2: "⛅",
+        3: "☁️",
+        45: "🌫️",
+        51: "🌦️",
+        61: "🌧️",
+        80: "🌧️",
+        95: "⛈️",
+      };
+
+      let lat = 10.8231,
+        lon = 106.6297,
+        unit = "C",
+        data = null,
+        name = "Hồ Chí Minh";
+
+      function loadCity(la, lo, na, btn) {
+        lat = la;
+        lon = lo;
+        name = na;
+        document.getElementById("lat").value = la;
+        document.getElementById("lon").value = lo;
+        document
+          .querySelectorAll(".city-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        fetch_weather();
+      }
+
+      function loadCoords() {
+        lat = parseFloat(document.getElementById("lat").value);
+        lon = parseFloat(document.getElementById("lon").value);
+        if (isNaN(lat) || isNaN(lon)) {
+          alert("Nhập tọa độ hợp lệ");
+          return;
+        }
+        name = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+        fetch_weather();
+      }
+
+      function fetch_weather() {
+        document.getElementById("loading").classList.remove("hidden");
+        document.getElementById("weather").classList.add("hidden");
+
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min`;
+
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((r) => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return r.json();
+          })
+          .then((d) => {
+            data = d;
+            render();
+            document.getElementById("loading").classList.add("hidden");
+            document.getElementById("weather").classList.remove("hidden");
+          })
+          .catch((e) => {
+            console.error("Fetch error:", e);
+            document.getElementById("loading").innerHTML =
+              `<p>❌ Lỗi: ${e.message}</p><p style="font-size: 12px; margin-top: 10px;">Vui lòng kiểm tra kết nối internet</p>`;
+          });
+      }
+
+      function convert(c) {
+        return unit === "F" ? Math.round((c * 9) / 5 + 32) : Math.round(c);
+      }
+
+      function render() {
+        const c = data.current;
+        const icon = CODES[c.weather_code] || "❓";
+        const now = new Date();
+
+        document.getElementById("location").textContent = name;
+        document.getElementById("temp").textContent =
+          convert(c.temperature_2m) + "°";
+        document.getElementById("time").textContent = now.toLocaleDateString(
+          "vi-VN",
+          { weekday: "short", day: "2-digit", month: "2-digit" },
+        );
+        document.getElementById("icon").textContent = icon;
+        document.getElementById("desc").textContent =
+          [
+            "Nắng",
+            "Ít mây",
+            "Có mây",
+            "Mây",
+            "Sương mù",
+            "Mưa nhẹ",
+            "Mưa",
+            "Mưa rào",
+            "Giông bão",
+          ][Math.min(8, Object.keys(CODES).indexOf(String(c.weather_code)))] ||
+          "Không rõ";
+        document.getElementById("humidity").textContent =
+          c.relative_humidity_2m + "%";
+        document.getElementById("wind").textContent =
+          Math.round(c.wind_speed_10m) + " km/h";
+        document.getElementById("rain").textContent =
+          c.precipitation.toFixed(1) + " mm";
+        document.getElementById("high").textContent = convert(
+          Math.max(...data.daily.temperature_2m_max.slice(0, 1)),
+        );
+        document.getElementById("low").textContent = convert(
+          Math.min(...data.daily.temperature_2m_min.slice(0, 1)),
+        );
+
+        // Hourly
+        let h = "";
+        for (let i = 0; i < 12 && i < data.hourly.time.length; i++) {
+          const t = new Date(data.hourly.time[i]);
+          const ico = CODES[data.hourly.weather_code[i]] || "❓";
+          h += `<div class="hourly-item">
+                    <div class="hourly-time">${t.getHours().toString().padStart(2, "0")}:00</div>
+                    <div class="hourly-icon">${ico}</div>
+                    <div class="hourly-temp">${convert(data.hourly.temperature_2m[i])}°</div>
+                </div>`;
+        }
+        document.getElementById("hourly").innerHTML = h;
+
+        // Daily
+        let d = "";
+        for (let i = 0; i < 7 && i < data.daily.time.length; i++) {
+          const t = new Date(data.daily.time[i]);
+          const ico = CODES[data.daily.weather_code[i]] || "❓";
+          d += `<div class="daily-item">
+                    <div class="daily-day">${t.toLocaleDateString("vi-VN", { weekday: "short" })}</div>
+                    <div class="daily-icon">${ico}</div>
+                    <div class="daily-temps">
+                        <span class="daily-low">${convert(data.daily.temperature_2m_min[i])}°</span>
+                        <span class="daily-high">${convert(data.daily.temperature_2m_max[i])}°</span>
+                    </div>
+                </div>`;
+        }
+        document.getElementById("daily").innerHTML = d;
+      }
+
+      function setUnit(u, btn) {
+        unit = u;
+        document
+          .querySelectorAll(".btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        if (data) render();
+      }
+
+      function reload() {
+        fetch_weather();
+      }
+
+      // Load on start
+      window.addEventListener("DOMContentLoaded", () => {
+        fetch_weather();
+      });
+    </script>
+  </body>
+</html>

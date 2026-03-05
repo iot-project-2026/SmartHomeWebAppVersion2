@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>User Profile</title>
+
+    <link rel="stylesheet" href="css/sidebar.css" />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #0f172a;
+        color: #e5e7eb;
+      }
+
+      /* APP LAYOUT */
+
+      .app {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* MAIN */
+
+      .main-content {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      /* PROFILE CARD */
+
+      .profile-card {
+        width: 420px;
+        background: #020617;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      /* HEADER */
+
+      .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .avatar-box {
+        position: relative;
+        display: inline-block;
+      }
+
+      .avatar-box img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #3b82f6;
+      }
+
+      .avatar-box label {
+        display: block;
+        margin-top: 10px;
+        font-size: 13px;
+        color: #60a5fa;
+        cursor: pointer;
+      }
+
+      .avatar-box input {
+        display: none;
+      }
+
+      .profile-name {
+        margin-top: 12px;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .profile-role {
+        font-size: 13px;
+        color: #94a3b8;
+      }
+
+      /* INFO */
+
+      .info-group {
+        margin-bottom: 16px;
+      }
+
+      .info-group label {
+        display: block;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 5px;
+      }
+
+      .info-group input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #1e293b;
+        background: #020617;
+        color: #e5e7eb;
+        font-size: 14px;
+      }
+
+      .info-group input:disabled {
+        opacity: 0.6;
+      }
+
+      /* ACTION BUTTONS */
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .actions button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .edit-btn {
+        background: #2563eb;
+        color: white;
+      }
+
+      .save-btn {
+        background: #22c55e;
+        color: #020617;
+        display: none;
+      }
+
+      .logout-btn {
+        background: #ef4444;
+        color: white;
+        margin-top: 10px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      /* TITLE */
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #60a5fa;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <div id="sidebar-container"></div>
+
+      <main class="main-content">
+        <div class="profile-card">
+          <!-- PROFILE HEADER -->
+
+          <div class="profile-header">
+            <div class="avatar-box">
+              <img id="avatar" src="/image/image.png" />
+
+              <input type="file" id="avatarInput" accept="image/*" />
+
+              <label for="avatarInput">Đổi ảnh đại diện</label>
+            </div>
+
+            <div id="profile-name" class="profile-name">User</div>
+
+            <div class="profile-role">Chủ sở hữu căn nhà</div>
+          </div>
+
+          <div class="section-title">Thông tin cá nhân</div>
+
+          <div class="info-group">
+            <label>Email</label>
+            <input id="email" type="email" disabled />
+          </div>
+
+          <div class="info-group">
+            <label>Số điện thoại</label>
+            <input id="phone" type="text" disabled />
+          </div>
+
+          <div class="info-group">
+            <label>Địa chỉ</label>
+            <input id="address" type="text" disabled />
+          </div>
+
+          <div class="actions">
+            <button id="editBtn" class="edit-btn">Chỉnh sửa</button>
+            <button id="saveBtn" class="save-btn">Lưu</button>
+          </div>
+
+          <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/sidebar.js" defer></script>
+    <script src="js/profile.js" defer></script>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("currentUser");
+
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

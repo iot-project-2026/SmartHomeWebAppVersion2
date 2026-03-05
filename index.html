@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartHome Chat</title>
+
+    <!-- THEME (BẮT BUỘC – LOAD TRƯỚC) -->
+    <link rel="stylesheet" href="css/theme.css" />
+
+    <!-- SIDEBAR -->
+    <link rel="stylesheet" href="css/sidebar.css" />
+
+    <!-- CHAT -->
+    <link rel="stylesheet" href="css/chat.css" />
+
+    <!-- JS -->
+    <script src="js/sidebar.js" defer></script>
+    <script src="js/chat.js" defer></script>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <div id="sidebar-container"></div>
+
+    <!-- MAIN CHAT -->
+    <div class="main">
+      <!-- HEADER -->
+      <div class="header">
+        <div class="menu-3dot">
+          <button onclick="toggleMenu()">⋮</button>
+          <div class="dropdown" id="dropdown">
+            <button><a href="/login.html">Đăng xuất</a></button>
+            <button>🕘 Lịch sử chat</button>
+            <button onclick="clearChat()">🗑 Xóa lịch sử</button>
+            <button onclick="refreshChat()">🔄 Làm mới</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT BODY -->
+      <div class="chat" id="chat">
+        <div class="message ai-msg">
+          👋 Xin chào! Tôi có thể giúp gì cho bạn?
+        </div>
+      </div>
+
+      <!-- INPUT -->
+      <div class="input-area">
+        <div class="input-box">
+          <button class="icon-btn">🎤</button>
+          <textarea id="input" placeholder="Nhập tin nhắn..."></textarea>
+          <button class="icon-btn" onclick="send()">➤</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,253 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+:root {
+  --accent-color: #8672ff;
+  --base-color: white;
+  --text-color: #2e2b41;
+  --input-color: #f3f0ff;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family:
+    Poppins,
+    Segoe UI,
+    sans-serif;
+  font-size: 12pt;
+  color: var(--text-color);
+  text-align: center;
+}
+body {
+  min-height: 100vh;
+  background-image: url(/image/background.jpg);
+  background-size: cover;
+  background-position: right;
+  overflow: hidden;
+}
+.wrapper {
+  box-sizing: border-box;
+  background-color: var(--base-color);
+  height: 100vh;
+  width: max(40%, 600px);
+  padding: 10px;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+form {
+  width: min(400px, 100%);
+  margin-top: 20px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+form > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+form label {
+  flex-shrink: 0;
+  height: 50px;
+  width: 50px;
+  background-color: var(--accent-color);
+  fill: var(--base-color);
+  color: var(--base-color);
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+form input {
+  box-sizing: border-box;
+  flex-grow: 1;
+  min-width: 0;
+  height: 50px;
+  padding: 1em;
+  font: inherit;
+  border-radius: 0 10px 10px 0;
+  border: 2px solid var(--input-color);
+  border-left: none;
+  background-color: var(--input-color);
+  transition: 150ms ease;
+}
+form input:hover {
+  border-color: var(--accent-color);
+}
+form input:focus {
+  outline: none;
+  border-color: var(--text-color);
+}
+div:has(input:focus) > label {
+  background-color: var(--text-color);
+}
+form input::placeholder {
+  color: var(--text-color);
+}
+form button {
+  margin-top: 10px;
+  border: none;
+  border-radius: 1000px;
+  padding: 0.85em 4em;
+  background-color: var(--accent-color);
+  color: var(--base-color);
+  font: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+form button:hover {
+  background-color: var(--text-color);
+}
+form button:focus {
+  outline: none;
+  background-color: var(--text-color);
+}
+a {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 1100px) {
+  .wrapper {
+    width: min(600px, 100%);
+    border-radius: 0;
+  }
+}
+form div.incorrect label {
+  background-color: #f06272;
+}
+form div.incorrect input {
+  border-color: #f06272;
+}
+#error-message {
+  color: #f06272;
+}
+/* ===== HEADER ===== */
+.header {
+  height: 48px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.menu-3dot {
+  position: relative;
+}
+
+.menu-3dot button {
+  background: none;
+  border: none;
+  color: #ececf1;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  background: #202123;
+  border-radius: 8px;
+  width: 200px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dropdown button {
+  padding: 10px;
+  background: none;
+  border: none;
+  color: #ececf1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown button:hover {
+  background: #343541;
+}
+
+/* ===== CHAT ===== */
+.chat {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  max-width: 800px;
+  line-height: 1.6;
+  padding: 14px 18px;
+  border-radius: 14px;
+}
+
+.user-msg {
+  align-self: flex-end;
+  background: #444654;
+}
+
+.ai-msg {
+  align-self: flex-start;
+  background: #3b3c4a;
+}
+
+/* ===== INPUT ===== */
+.input-area {
+  padding: 24px;
+  background: #343541;
+  display: flex;
+  justify-content: center;
+}
+
+.input-box {
+  width: 100%;
+  max-width: 900px;
+  background: #40414f;
+  border-radius: 18px;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px 16px;
+  gap: 12px;
+}
+
+.input-box textarea {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #fff;
+  resize: none;
+  outline: none;
+  min-height: 60px;
+  max-height: 200px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  padding-bottom: 6px;
+}

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Home Dashboard - Pro</title>
+
+    <!-- LIB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <div id="sidebar-container"></div>
+
+      <div class="main-content">
+        <div class="dashboard-grid" id="main-grid">
+          <!-- WEATHER -->
+          <div class="slot card-full">
+            <div class="card">
+              <div class="weather-header">
+                <div>
+                  <h2 id="current-day">Thursday</h2>
+                  <p id="current-date">2 March 2024</p>
+                  <p style="margin-top: 10px">
+                    <i class="fa-solid fa-bell"></i> Họp lúc 9:00 sáng
+                  </p>
+                </div>
+                <div style="text-align: right">
+                  <div class="weather-temp">28°C</div>
+                  <p>Hà Nội, Việt Nam</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TEMP -->
+          <div class="slot">
+            <div class="card">
+              <h3>Home Temperature</h3>
+              <div class="temp-circle">25°C</div>
+              <p class="status">Heating</p>
+            </div>
+          </div>
+
+          <!-- LIGHTS -->
+          <div class="slot">
+            <div class="card">
+              <h3>Lights</h3>
+              <div class="row">
+                <span>Living Room</span>
+                <div class="switch on"></div>
+              </div>
+              <div class="row">
+                <span>Bedroom</span>
+                <div class="switch"></div>
+              </div>
+              <div class="row">
+                <span>Kitchen</span>
+                <div class="switch on"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLOCK -->
+          <div class="slot">
+            <div class="card">
+              <h3>Clock</h3>
+              <div id="time" class="clock">00:00</div>
+              <p class="sub">Báo thức: 06:00</p>
+            </div>
+          </div>
+
+          <!-- AI CHAT -->
+          <div class="slot">
+            <div class="card">
+              <h3>AI Home Assistant</h3>
+              <div class="chat-box" id="chat-content">
+                <p class="ai">AI: Chào bạn! Tôi có thể giúp gì?</p>
+              </div>
+              <input
+                type="text"
+                class="chat-input"
+                placeholder="Hỏi AI..."
+                onkeypress="handleChat(event)"
+              />
+            </div>
+          </div>
+
+          <!-- WIFI -->
+          <div class="slot">
+            <div class="card">
+              <h3>Network</h3>
+              <div class="center">
+                <i class="fa-solid fa-wifi"></i>
+              </div>
+              <p class="sub">WiFi: Connected</p>
+            </div>
+          </div>
+
+          <!-- MUSIC -->
+          <div class="slot">
+            <div class="card">
+              <h3>Music</h3>
+              <p>🎵 Interstellar - Hans Zimmer</p>
+              <div class="music-control">
+                <i class="fa-solid fa-backward-step"></i>
+                <i class="fa-solid fa-pause"></i>
+                <i class="fa-solid fa-forward-step"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- CAMERA -->
+          <div class="slot card-full">
+            <div class="card">
+              <h3>📷 Live Camera</h3>
+              <video id="video" autoplay muted></video>
+              <button onclick="startCamera()">Kết nối Camera</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JS -->
+      <script src="js/dashboard.js" defer></script>
+      <script src="js/sidebar.js" defer></script>
+    </div>
+  </body>
+</html>
